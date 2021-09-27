@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import University from '../University/University';
 import Cart from '../Cart/Cart';
+import { addToDb, clearTheCart, getStoredCart } from '../utilities/local-storage';
 const Main = () => {
     //Declaring State
     const [universities, setUniversities] = useState([]);
@@ -11,6 +12,20 @@ const Main = () => {
             .then(res => res.json())
             .then(data => setUniversities(data));
     }, []);
+    useEffect(() => {
+        if (universities.length) {
+            const savedCart = getStoredCart()
+            const storedCart = [];
+            for (const name in savedCart) {
+                const addedProduct = universities.find(university => university.name === name);
+                if (addedProduct) {
+                    storedCart.push(addedProduct)
+                }
+
+            }
+            setCart(storedCart);
+        }
+    }, [universities])
     //Add to favourite button functionality
     const handleAddToFav = university => {
         for (const item of cart) {
@@ -22,7 +37,9 @@ const Main = () => {
         //Creating a new array and setting it
         const newCart = [...cart, university];
         setCart(newCart);
+        addToDb(university.name)
     }
+
     return (
         <div className="container mx-auto row mt-5">
             <div className="col-lg-9">
