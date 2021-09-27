@@ -10,7 +10,7 @@ const University = (props) => {
         <div className="col">
             <div className="card h-100">
                 <img className="card-img-top" src={image} alt="" />
-                <div className="card-body">
+                <div className="card-body d-flex flex-column justify-content-between">
                     <h5 className="card-title">
                         {name}
                     </h5>
